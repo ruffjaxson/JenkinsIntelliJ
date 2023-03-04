@@ -49,6 +49,7 @@ class Calculator {
     if int a = 0 then this method returns: 0
     if int a = 10 then this method returns: 1010
     if int a = 16 then this method returns: 10000
+    Tip: use “Integer.toBinaryString(n)”
      */
     String intToBinaryNumber(int n){
         return null;
