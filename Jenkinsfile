@@ -1,4 +1,11 @@
 pipeline {
+
+    environment {
+            registry = "ruffjaxson/204jenkins_calculator_java_app"
+            registryCredential = 'dockerhub'
+            dockerImage=''
+    }
+
     agent any
     tools {
         maven 'apache maven 3.6.3'
@@ -42,5 +49,40 @@ pipeline {
             }
         }
 
+        stage ('Building image') {
+            steps {
+                script {
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                }
+            }
+        }
+
+        stage ('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push()
+                    }
+                }
+            }
+        }
+
+        stage ('Remove unused docker image') {
+            steps {
+                sh "docker rmi $registry:$BUILD_NUMBER"
+            }
+        }
+
+
+
     }
+
+    post {
+    	failure{
+           	  mail to: 'jaxson@halda.io',
+              subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+              body: "Something is wrong with ${env.BUILD_URL}"
+    	}
+    }
+
 }
