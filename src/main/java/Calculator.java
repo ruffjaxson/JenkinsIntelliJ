@@ -60,7 +60,7 @@ class Calculator {
 
     /*
     Returns binary value of the given int number
-    The binary number will be stored as a string
+    The binary number should be stored as a string
     if int a = 0 then this method returns: 0
     if int a = 10 then this method returns: 1010
     if int a = 16 then this method returns: 10000
